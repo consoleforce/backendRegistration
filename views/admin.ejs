@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    h2 {
+      color: #555;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f8f8f8;
+    }
+
+    a {
+      display: block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: #007BFF;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .delete-form {
+      display: inline;
+    }
+
+    .delete-button {
+      margin-left: 10px;
+      color: #dc3545;
+      background-color: #fff;
+      border: 1px solid #dc3545;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome, <%= user.username %>!</h1>
+  <h2>User List</h2>
+  <ul>
+    <% users.forEach(user => { %>
+      <li>
+        <strong><%= user.username %></strong> - <%= user.email %>
+        <form action="/admin/update-role" method="post" class="delete-form">
+          <label for="role">Role:</label>
+          <select name="role" id="role">
+            <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+            <option value="moderator" <%= user.role === 'moderator' ? 'selected' : '' %>>Moderator</option>
+            <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+          </select>
+          <input type="hidden" name="userId" value="<%= user.id %>">
+          <button type="submit">Change Role</button>
+        </form>
+        <form action="/admin/delete-user" method="post" class="delete-form">
+          <input type="hidden" name="userId" value="<%= user.id %>">
+          <button type="submit" class="delete-button">Delete</button>
+        </form>
+      </li>
+    <% }); %>
+  </ul>
+  <a href="/logout">Logout</a>
+</body>
+</html>

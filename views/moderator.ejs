@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moderator Page</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    h2 {
+      color: #555;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #fff;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    a {
+      display: block;
+      margin-top: 20px;
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome, <%= user.username %> you are moderator!</h1>
+  
+  <h2>User List</h2>
+  <ul>
+    <% users.forEach(user => { %>
+      <li>
+        <strong><%= user.username %></strong> - <%= user.email %> - <%= user.role %>
+        <% if (user.status === 'banned') { %>
+          <span class="banned" style="color: red;">Banned</span>
+          <% if (user.role === 'user') { %>
+            <form action="/moderator/unban-user" method="post" style="display: inline;">
+              <input type="hidden" name="userId" value="<%= user.id %>">
+              <button type="submit">Unban User</button>
+            </form>
+          <% } %>
+        <% } else { %>
+          <span class="active" style="color: green;">Active</span>
+          <% if (user.role === 'user') { %>
+            <form action="/moderator/ban-user" method="post" style="display: inline;">
+              <input type="hidden" name="userId" value="<%= user.id %>">
+              <button type="submit">Ban User</button>
+            </form>
+          <% } %>
+        <% } %>
+      </li>
+    <% }); %>
+  </ul>
+  
+<a href="/logout">Logout</a>
+</body>
+</html>
